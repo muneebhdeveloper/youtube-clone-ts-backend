@@ -19,6 +19,10 @@ export class User {
 
   @prop({ required: true })
   public password: string;
+
+  public async comparePassword(password: string): Promise<boolean> {
+    return argon2.verify(this.password, password);
+  }
 }
 
 export const UserModel = getModelForClass(User, {

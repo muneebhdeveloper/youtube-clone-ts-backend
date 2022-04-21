@@ -5,6 +5,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { connectToDatabase, disconnectToDatabase } from "./utils/database";
 import logger from "./utils/logger";
+import userRoute from "./modules/user/user.route";
 
 const PORT = process.env.PORT || 4000;
 
@@ -19,6 +20,8 @@ app.use(
   })
 );
 app.use(helmet());
+
+app.use("/api/users", userRoute);
 
 const server = app.listen(PORT, async () => {
   await connectToDatabase();
