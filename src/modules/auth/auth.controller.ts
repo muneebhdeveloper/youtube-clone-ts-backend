@@ -2,8 +2,13 @@ import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { findUserByEmail } from "../user/user.service";
 import { signJwt } from "./auth.utils";
+import omit from "../../helpers/omit";
+import { LoginBody } from "./auth.schema";
 
-export async function loginHandler(req: Request, res: Response) {
+export async function loginHandler(
+  req: Request<{}, {}, LoginBody>,
+  res: Response
+) {
   const { email, password } = req.body;
 
   // Find the user by email
@@ -15,7 +20,7 @@ export async function loginHandler(req: Request, res: Response) {
       .send("Invalid email or password");
   }
 
-  const payload = user.toJSON();
+  const payload = omit(user.toJSON(), ["__v", "password"]);
 
   const jwt = signJwt(payload);
 
@@ -29,14 +34,4 @@ export async function loginHandler(req: Request, res: Response) {
   });
 
   return res.status(StatusCodes.OK).send(jwt);
-
-  // Check if user exists
-
-  // Verify user password
-
-  // Sign a JWT
-
-  // Add a cookie to the response
-
-  // Respond
 }
