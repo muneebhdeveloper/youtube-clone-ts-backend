@@ -14,7 +14,7 @@ export async function loginHandler(
   // Find the user by email
   const user = await findUserByEmail(email);
 
-  if (!user || !user.comparePassword(password)) {
+  if (!user || !(await user.comparePassword(password))) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .send("Invalid email or password");
